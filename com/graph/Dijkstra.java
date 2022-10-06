@@ -20,8 +20,8 @@ public class Dijkstra extends SearchAlgorithm{
         }
         totalPath.add(start);
         Collections.reverse(totalPath);
-        System.out.println(previous);
 
+        System.out.println(previous);
         System.out.println(totalPath);
     }
     public void search(String start, String finish){
@@ -35,18 +35,22 @@ public class Dijkstra extends SearchAlgorithm{
             String minNode = Collections.min(distances.entrySet(), Map.Entry.comparingByValue()).getKey();
             if(mapHeuristic.containsKey(minNode) && distances.containsKey(minNode)){
                 mapHeuristic.get(minNode).forEach((key, value)->{
-                    int tempDist = distances.get(minNode) + mapHeuristic.get(minNode).get(key);
-                    if(distances.containsKey(key)){
+
+                    if(distances.containsKey(key) && !visited.contains(key)){
+                        int tempDist = distances.get(minNode) + mapHeuristic.get(minNode).get(key);
                         if(tempDist < distances.get(key)){
                             distances.put(key, tempDist);
                             previous.put(key, minNode);
+
                         }
+
                     }
                 });
+                visited.add(minNode);
             }
 
             distances.remove(minNode);
-            System.out.println(distances);
+            System.out.println(visited);
         }
 
         reconstructPath(finish, start);
