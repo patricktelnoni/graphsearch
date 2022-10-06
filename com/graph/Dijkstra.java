@@ -13,8 +13,7 @@ public class Dijkstra extends SearchAlgorithm{
     }
 
     private void reconstructPath(String currentNode, String start){
-
-        while(currentNode != start){
+        while(!currentNode.equals(start)){
             totalPath.add(currentNode);
             currentNode = previous.get(currentNode);
         }
@@ -24,6 +23,7 @@ public class Dijkstra extends SearchAlgorithm{
         System.out.println(previous);
         System.out.println(totalPath);
     }
+
     public void search(String start, String finish){
         mapHeuristic.forEach((key, value) ->{
             distances.put(key, Integer.MAX_VALUE);
@@ -35,15 +35,12 @@ public class Dijkstra extends SearchAlgorithm{
             String minNode = Collections.min(distances.entrySet(), Map.Entry.comparingByValue()).getKey();
             if(mapHeuristic.containsKey(minNode) && distances.containsKey(minNode)){
                 mapHeuristic.get(minNode).forEach((key, value)->{
-
                     if(distances.containsKey(key) && !visited.contains(key)){
                         int tempDist = distances.get(minNode) + mapHeuristic.get(minNode).get(key);
                         if(tempDist < distances.get(key)){
                             distances.put(key, tempDist);
                             previous.put(key, minNode);
-
                         }
-
                     }
                 });
                 visited.add(minNode);
