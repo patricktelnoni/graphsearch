@@ -50,7 +50,5 @@ public class Dijkstra extends SearchAlgorithm{
         }
 
         reconstructPath(finish, start);
-        //ystem.out.print(previous);
-
     }
 }
