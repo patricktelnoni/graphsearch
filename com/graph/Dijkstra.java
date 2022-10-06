@@ -5,6 +5,7 @@ import java.util.*;
 public class Dijkstra extends SearchAlgorithm{
     HashMap<String, Integer> distances = new HashMap<>();
     HashMap<String, String> previous = new HashMap<>();
+    ArrayList<String> totalPath = new ArrayList<>();
 
 
     public Dijkstra(HashMap<String, Map<String,Integer>> graph){
@@ -12,7 +13,6 @@ public class Dijkstra extends SearchAlgorithm{
     }
 
     private void reconstructPath(String currentNode, String start){
-        ArrayList<String> totalPath = new ArrayList<>();
 
         while(currentNode != start){
             totalPath.add(currentNode);
