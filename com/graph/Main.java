@@ -104,7 +104,7 @@ public class Main {
         bestFirst.search(s, "K");
 
         Dijkstra dijkstra = new Dijkstra(graphHeuristicBook.getMapHeuristic());
-        dijkstra.search(s, l);
+        dijkstra.search(s, k);
 
     }
 }
