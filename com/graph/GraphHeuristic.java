@@ -3,30 +3,45 @@ package com.graph;
 import java.util.*;
 
 public class GraphHeuristic<T> {
-    private HashMap<String, Map<String,Integer>> mapHeuristic = new HashMap<>();
-    public ArrayList<String> track = new ArrayList<>();
-    private HashMap<String, Integer> pq = new HashMap<>();
-    private ArrayList<String> visited = new ArrayList<>();
-    private HashMap<String, Integer> generatedTrack = new HashMap<>();
+    private ArrayList<Node> mapHeuristic    = new ArrayList<>();
+    private HashMap<String, Integer> pq     = new HashMap<>();
+    private ArrayList<String> visited       = new ArrayList<>();
+    private ArrayList<String> addedVertices = new ArrayList<>();
 
-    public HashMap<String, Map<String, Integer>> getMapHeuristic() {
+    public ArrayList<Node> getMapHeuristic() {
         return mapHeuristic;
     }
 
-    private void addVertex(String s){
-        mapHeuristic.put(s, new HashMap<String, Integer>());
+    private void addVertex(Node node){
+        mapHeuristic.add(node);
     }
 
-    public void addEdge(String source, String destination, int distance){
-        if(!mapHeuristic.containsKey(source)){
+    public void addEdge(Node source, Node destination, double distance){
+        if(!mapHeuristic.contains(source)){
             addVertex(source);
+            source.setNeighbor(new HashMap<String, Double>());
+            //addedVertices.add(source);
         }
-        /*if(!mapHeuristic.containsKey(destination)){
+
+        if(mapHeuristic.contains(source)){
+            HashMap<Node, Double> neighbor = source.getNeighbor();
+            neighbor.put(destination, distance);
+            source.setNeighbor(neighbor);
+
+        }
+
+        /*
+         if(!mapHeuristic.contains(node.getNode())){
+            addVertex(node);
+        }
+
+        if(!mapHeuristic.containsKey(destination)){
             addVertex(destination);
         }*/
-        if(!mapHeuristic.get(source).containsKey(source)) {
-            mapHeuristic.get(source).put(destination, distance);
-        }
+
+        /*if(!mapHeuristic.get(node).getNode().containsKey(source)) {
+            mapHeuristic.get(source).put(new Node(destination, false, new HashMap<T, Integer>()), distance);
+        }*/
     }
 
     public String reconstructPath(ArrayList<String> visited){
@@ -34,12 +49,15 @@ public class GraphHeuristic<T> {
         current         = visited.get(visited.size()-1);
 
         ArrayList<String> totalPath = new ArrayList<>();
+
         totalPath.add(current);
         visited.remove(current);
+
         while(!visited.isEmpty()){
             String tail = visited.get(visited.size()-1);
-            if(mapHeuristic.containsKey(tail)){
-                if(mapHeuristic.get(tail).containsKey(current)){
+            if(mapHeuristic.contains(tail)){
+                int index = mapHeuristic.indexOf(tail);
+                if(mapHeuristic.get(index).getNeighbor().containsKey(current)){
                     totalPath.add(tail);
                     current = tail;
                 }
@@ -55,63 +73,21 @@ public class GraphHeuristic<T> {
         return Math.abs((value - 1) % 3 - index % 3) + Math.abs((value - 1)/3  - index / 3);
     }
 
-    public void AStar(String start, String finish, int cost){
-        Map.Entry<String, Integer> best_node;
-        pq.put(start, cost);
-        if(pq.size() == 0){
-            System.out.println("Not found");
-        }
-        else{
-            best_node       = Collections.min(pq.entrySet(), Map.Entry.comparingByValue());
-            if(!visited.contains(best_node.getKey())){
-                visited.add(best_node.getKey());
-                pq.remove(best_node.getKey());
-                //System.out.println(best_node.getKey());
-                mapHeuristic.get(best_node.getKey()).forEach((key, value)->{
-                    if(!pq.containsKey(key)){
-                        if(!visited.contains(key)){
-                            pq.put(key, value + cost);
-                        }
-                    }
-                });
-                if(pq.containsKey(finish)){
-                    String path = reconstructPath(visited);
-                    generatedTrack.put(path, pq.get(finish));
-
-                    HashMap<String, Integer> mergedMap = new HashMap<>();
-                    mergedMap.putAll(generatedTrack);
-                    mergedMap.putAll(pq);
-                    //System.out.println(path);
-                    Map.Entry<String, Integer> minPair = Collections.min(mergedMap.entrySet(), Map.Entry.comparingByValue());
-                    if(generatedTrack.containsKey(minPair.getKey())){
-                        System.out.println("Ketemu " + mergedMap);
-                    }
-                    else{
-                        pq.remove(finish);
-                        AStar(minPair.getKey(), finish, minPair.getValue());
-                    }
-                }
-                else{
-                    best_node = Collections.min(pq.entrySet(), Map.Entry.comparingByValue());
-                    AStar(best_node.getKey(), finish, best_node.getValue());
-                }
-            }
-            else{
-                pq.remove(best_node.getKey());
-                best_node = Collections.min(pq.entrySet(), Map.Entry.comparingByValue());
-                AStar(best_node.getKey(), finish, best_node.getValue());
-            }
-        }
-    }
-
     public void printAdjacency(){
-        mapHeuristic.forEach((key, value) -> {
-            System.out.print(key + " : (");
+        for (Node node: mapHeuristic) {
+            System.out.print(node.getNode() + " : (");
+            node.getNeighbor().forEach((key, value)->{
+                System.out.print(key + ": " + value + ", ");
+            });
+            System.out.print(")\n");
+        }
+        /*mapHeuristic.forEach((key, value) -> {
+            System.out.print(key.getNode() + " : (");
             value.forEach((key1, value1) -> {
                 System.out.print(key1 + ": " + value1 + ", ");
             });
             System.out.print(")\n");
-        });
+        });*/
         //countVertices();
         //countEdges();
     }

@@ -6,12 +6,14 @@ import java.util.HashMap;
 import java.util.Map;
 
 public class SearchAlgorithm {
-    protected HashMap<String, Integer> pq = new HashMap<>();
-    public ArrayList<String> visited = new ArrayList<>();
-    public HashMap<String, Map<String,Integer>> mapHeuristic = new HashMap<>();
+    protected HashMap<Node, Double> pq = new HashMap<>();
+    public ArrayList<Node> visited = new ArrayList<>();
+    public ArrayList<Node> mapHeuristic;
 
-    protected String reconstructPath(ArrayList<String> visited){
-        String current  = "";
+    protected String reconstructPath(){
+        return "";
+        
+        /*String current  = "";
         current         = visited.get(visited.size()-1);
 
         ArrayList<String> totalPath = new ArrayList<>();
@@ -19,7 +21,7 @@ public class SearchAlgorithm {
         visited.remove(current);
         while(!visited.isEmpty()){
             String tail = visited.get(visited.size()-1);
-            if(mapHeuristic.containsKey(tail)){
+            if(mapHeuristic.contains(tail)){
                 if(mapHeuristic.get(tail).containsKey(current)){
                     totalPath.add(tail);
                     current = tail;
@@ -28,6 +30,6 @@ public class SearchAlgorithm {
             visited.remove(tail);
         }
         Collections.reverse(totalPath);
-        return String.join("-", totalPath);
+        return String.join("-", totalPath);*/
     }
 }
