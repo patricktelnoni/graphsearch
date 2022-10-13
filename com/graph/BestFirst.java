@@ -4,7 +4,6 @@ import java.util.*;
 
 public class BestFirst extends SearchAlgorithm{
     Node minNode;
-    //public static List<Node> path = new ArrayList<>();
     ArrayList<String> totalPath = new ArrayList<>();
 
     public BestFirst(ArrayList<Node> graph){
@@ -13,7 +12,6 @@ public class BestFirst extends SearchAlgorithm{
 
     private Node getMinNode(){
         double minDistance = 0.0;
-        //Node minNode = pq.get();
         for (Map.Entry<Node, Double> data: pq.entrySet()){
             if(!data.getKey().isVisited()){
                 if(minDistance == 0.0){
