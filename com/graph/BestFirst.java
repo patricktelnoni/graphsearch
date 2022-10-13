@@ -45,10 +45,10 @@ public class BestFirst extends SearchAlgorithm{
             visited.remove(current);
         }
         System.out.println(totalPath);
-
     }
 
     public void search(Node start, String finish){
+
         pq.put(start, 0.0);
         if(mapHeuristic.contains(start) && !start.isVisited()){
             HashMap<Node, Double> neighbor = start.getNeighbor();
@@ -57,14 +57,12 @@ public class BestFirst extends SearchAlgorithm{
                     pq.put(key, value);
             });
         }
-        //System.out.println(pq);
+
         start.setVisited(true);
         visited.add(start);
         pq.remove(start);
 
-        //if(pq.entrySet().stream().anyMatch(t-> t.getKey().isVisited() == false) ){
         if(pq.size() > 0){
-            //Node minNode = Collections.min(pq.entrySet(), Map.Entry.comparingByValue()).getKey();
             Node minNode = this.getMinNode();
             if(!pq.entrySet().stream().anyMatch(t -> t.getKey().getNode().equals(finish))){
                 search(minNode, finish);
@@ -73,7 +71,6 @@ public class BestFirst extends SearchAlgorithm{
                 visited.add(new Node<>(finish, true));
                 totalPath.add(finish);
                 getPath(finish);
-                //return;
             }
         }
         else
