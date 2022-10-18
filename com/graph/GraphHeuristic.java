@@ -16,15 +16,25 @@ public class GraphHeuristic<T> {
         mapHeuristic.add(node);
     }
 
-    public void addEdge(Node source, Node destination, double distance){
+    public Node getNeighborByNode(String root){
+        return mapHeuristic.stream().
+                filter(t -> t.getNode().equals(root)).
+                findFirst().
+                get();
+    }
+
+    public boolean containNode(String kota){
+        return  mapHeuristic.stream().anyMatch(node -> node.getNode().equals(kota));
+    }
+
+    public void addEdge(Node source, String destination, double distance){
         if(!mapHeuristic.contains(source)){
             addVertex(source);
             source.setNeighbor(new HashMap<String, Double>());
-            //addedVertices.add(source);
         }
 
         if(mapHeuristic.contains(source)){
-            HashMap<Node, Double> neighbor = source.getNeighbor();
+            HashMap<String, Double> neighbor = source.getNeighbor();
             neighbor.put(destination, distance);
             source.setNeighbor(neighbor);
 

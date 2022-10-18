@@ -3,40 +3,27 @@ package com.graph;
 import java.util.*;
 
 public class BestFirst extends SearchAlgorithm{
-    Node minNode;
+    String minNode;
     ArrayList<String> totalPath = new ArrayList<>();
 
-    public BestFirst(ArrayList<Node> graph){
+    public BestFirst(GraphHeuristic graph){
         mapHeuristic = graph;
     }
 
-    private Node getMinNode(){
-        double minDistance = 0.0;
-        for (Map.Entry<Node, Double> data: pq.entrySet()){
-            if(!data.getKey().isVisited()){
-                if(minDistance == 0.0){
-                    minDistance = data.getValue();
-                    minNode = data.getKey();
-                }
-                if(data.getValue() < minDistance){
-                    minDistance = data.getValue();
-                    minNode = data.getKey();
-                }
-            }
-        }
-        return minNode;
+    private String getMinNode(){
+        return Collections.min(pq.entrySet(), Map.Entry.comparingByValue()).getKey();
     }
 
     public void getPath(String finish){
 
         while(!visited.isEmpty()){
-            Node current = visited.get(visited.size()-1);
-            if(current.hasNeighbor()){
-                HashMap<Node, Double> neighbor = current.getNeighbor();
-                for(Map.Entry<Node, Double> n : neighbor.entrySet()){
-                    if(n.getKey().getNode().equals(finish)){
-                        totalPath.add(current.getNode());
-                        finish = current.getNode();
+            String current = visited.get(visited.size()-1);
+            if(mapHeuristic.containNode(current)){
+                HashMap<String, Double> neighbor = mapHeuristic.getNeighborByNode(current).getNeighbor();
+                for(Map.Entry<String, Double> n : neighbor.entrySet()){
+                    if(n.getKey().equals(finish)){
+                        totalPath.add(current);
+                        finish = current;
                     }
                 }
             }
@@ -45,28 +32,29 @@ public class BestFirst extends SearchAlgorithm{
         System.out.println(totalPath);
     }
 
-    public void search(Node start, String finish){
+    public void search(String start, String finish){
 
         pq.put(start, 0.0);
-        if(mapHeuristic.contains(start) && !start.isVisited()){
-            HashMap<Node, Double> neighbor = start.getNeighbor();
+        if(mapHeuristic.containNode(start) && !visited.contains(start)){
+            Node node = mapHeuristic.getNeighborByNode(start);
+            HashMap<String, Double> neighbor = node.getNeighbor();
             neighbor.forEach((key, value)->{
-                if(!key.isVisited())
+                if(!visited.contains(key))
                     pq.put(key, value);
             });
         }
 
-        start.setVisited(true);
+        //visited.
         visited.add(start);
         pq.remove(start);
 
         if(pq.size() > 0){
-            Node minNode = this.getMinNode();
-            if(!pq.entrySet().stream().anyMatch(t -> t.getKey().getNode().equals(finish))){
+            String minNode = this.getMinNode();
+            if(!pq.entrySet().stream().anyMatch(t -> t.getKey().equals(finish))){
                 search(minNode, finish);
             }
             else {
-                visited.add(new Node<>(finish, true));
+                visited.add(finish);
                 totalPath.add(finish);
                 getPath(finish);
             }

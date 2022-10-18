@@ -4,17 +4,16 @@ import java.util.HashMap;
 
 public class Node<T> {
 
-    private boolean isVisited;
+
     private String node;
-    private HashMap<Node, Double> neighbor;
+    private HashMap<String, Double> neighbor;
 
     public Node(){
 
     }
 
-    public Node(String node, boolean isVisited){
+    public Node(String node){
         this.node = node;
-        this.isVisited = isVisited;
     }
 
     public boolean hasNeighbor(){
@@ -25,9 +24,7 @@ public class Node<T> {
         return neighbor.get(node);
     }
 
-    public boolean isVisited(){
-        return isVisited;
-    }
+
 
     public void setNode(String node) {
         this.node = node;
@@ -37,15 +34,13 @@ public class Node<T> {
         return node;
     }
 
-    public void setVisited(boolean visited) {
-        isVisited = visited;
-    }
 
-    public HashMap<Node, Double> getNeighbor() {
+
+    public HashMap<String, Double> getNeighbor() {
         return neighbor;
     }
 
-    public void setNeighbor(HashMap<Node, Double> neighbor) {
+    public void setNeighbor(HashMap<String, Double> neighbor) {
         this.neighbor = neighbor;
     }
 }
