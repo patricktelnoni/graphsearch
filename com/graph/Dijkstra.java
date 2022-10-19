@@ -40,6 +40,9 @@ public class Dijkstra extends SearchAlgorithm{
         while (!distances.isEmpty() && !found){
             String minNode = Collections.min(distances.entrySet(), Map.Entry.comparingByValue()).getKey();
 
+            if(minNode.equals(finish))
+                found = true;
+
             if(mapHeuristic.containNode(minNode) && distances.containsKey(minNode)){
                 HashMap<String, Double> neighbor = mapHeuristic.getNeighborByNode(minNode).getNeighbor();
 
@@ -56,8 +59,7 @@ public class Dijkstra extends SearchAlgorithm{
                 }
                 visited.add(minNode);
             }
-            if(minNode.equals(finish))
-                found = true;
+
 
             distances.remove(minNode);
             //System.out.println(visited);
